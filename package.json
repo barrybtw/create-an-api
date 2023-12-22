@@ -33,8 +33,16 @@
   "engines": {
     "node": ">=18"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "interactive",
+    "cli",
+    "typescript",
+    "api",
+    "backend",
+    "rest",
+    "ORM"
+  ],
+  "author": "that barry guy <unknown@unknown.not> (https://github.com/barrybtw)",
   "dependencies": {
     "@total-typescript/ts-reset": "^0.5.1",
     "@types/node": "^20.10.5",
