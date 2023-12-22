@@ -7,11 +7,11 @@
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/barrybtw/create-an-api.git"
+    "url": "git+https://github.com/barrybtw/create-an-api.git"
   },
   "exports": "./dist/index.js",
   "bin": {
-    "create-an-api": "./dist/index.js"
+    "create-an-api": "dist/index.js"
   },
   "files": [
     "dist",
