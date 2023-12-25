@@ -35,6 +35,9 @@ dependencies:
   tsup:
     specifier: ^8.0.1
     version: 8.0.1(typescript@5.3.3)
+  type-fest:
+    specifier: ^4.8.3
+    version: 4.8.3
   typescript:
     specifier: ^5.3.3
     version: 5.3.3
@@ -1298,6 +1301,11 @@ packages:
     transitivePeerDependencies:
       - supports-color
       - ts-node
+    dev: false
+
+  /type-fest@4.8.3:
+    resolution: {integrity: sha512-//BaTm14Q/gHBn09xlnKNqfI8t6bmdzx2DXYfPBNofN0WUybCEUDcbCWcTa0oF09lzLjZgPphXAsvRiMK0V6Bw==}
+    engines: {node: '>=16'}
     dev: false
 
   /typescript@5.3.3:
