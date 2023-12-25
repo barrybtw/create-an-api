@@ -12,13 +12,17 @@ interface CLIFLags {
   import_alias: string;
 }
 
-const Packages = ["thing"] as const;
-type Available_Packages = (typeof Packages)[number];
+const HTTP_Frameworks = ["elysia", "express"] as const;
+type Available_HTTP_Frameworks = (typeof HTTP_Frameworks)[number];
+
+interface Options {
+  http_framework: Available_HTTP_Frameworks;
+}
 
 interface CLIResults {
   app_name: string;
   flags: CLIFLags;
-  packages: Available_Packages[];
+  options: Options;
 }
 
 const default_options: CLIResults = {
@@ -28,7 +32,9 @@ const default_options: CLIResults = {
     no_install: false,
     import_alias: "@/",
   },
-  packages: [],
+  options: {
+    http_framework: "express",
+  },
 };
 
 async function run_the_cli(): Promise<CLIResults> {
@@ -62,10 +68,20 @@ async function run_the_cli(): Promise<CLIResults> {
         name: () =>
           p.text({
             message: "What is the name of your project?",
-            defaultValue: provided_name,
+            defaultValue: cli_results.app_name,
+            placeholder: cli_results.app_name,
             validate: validate_app_name,
           }),
       }),
+      http_framework: () =>
+        p.select({
+          message: "Which http framework would you like to use?",
+          options: [
+            { value: "express", label: "Express.js" } as const,
+            { value: "elysia", label: "Elysia.js" } as const,
+          ] as const,
+          initialValue: "express",
+        }),
     },
     {
       onCancel() {
@@ -74,13 +90,13 @@ async function run_the_cli(): Promise<CLIResults> {
     }
   );
 
-  const packages: Available_Packages[] = [];
-
   //
   return {
     app_name: project.name ?? cli_results.app_name,
-    packages,
     flags: cli_results.flags,
+    options: {
+      http_framework: project.http_framework as Available_HTTP_Frameworks,
+    },
   };
 }
 
