@@ -25,6 +25,7 @@
 
     /* TYPE CHECKING RULES */
     "strict": true,
+    "alwaysStrict": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitOverride": true,
     "noImplicitReturns": true,
