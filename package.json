@@ -1,5 +1,5 @@
 {
-  "name": "create-an-api",
+  "name": "create-maldini",
   "version": "0.0.1",
   "description": "",
   "license": "MIT",
@@ -7,11 +7,11 @@
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/barrybtw/create-an-api.git"
+    "url": "git+https://github.com/barrybtw/create-maldini.git"
   },
   "exports": "./dist/index.js",
   "bin": {
-    "create-an-api": "dist/index.js"
+    "create-maldini": "dist/index.js"
   },
   "files": [
     "dist",
