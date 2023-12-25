@@ -24,6 +24,10 @@ async function main() {
   logger.info(`Install: ${no_install ? "No" : "Yes"}`);
   logger.info(`HTTP Framework: ${http_framework}`);
 
+  // Make a builder as we're going to add even more options than just the http framework, such as ORM, database, etc.
+
+  // Do some magic here with building the directory structure
+
   process.exit(0);
 }
 
