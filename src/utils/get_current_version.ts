@@ -4,7 +4,7 @@ import { type PackageJson } from "type-fest";
 
 import { PKG_ROOT } from "@/constants.js";
 
-export const getVersion = () => {
+export const get_current_version = () => {
   const packageJsonPath = path.join(PKG_ROOT, "package.json");
 
   const packageJsonContent = fs.readJSONSync(packageJsonPath) as PackageJson;
