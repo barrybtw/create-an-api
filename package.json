@@ -1,7 +1,7 @@
 {
   "name": "create-maldini",
   "version": "0.0.2",
-  "description": "",
+  "description": "CLI to scaffold a TypeScript backend including an ORM among other things",
   "license": "MIT",
   "type": "module",
   "main": "index.js",

@@ -1,6 +1,7 @@
 import { CREATE_MALDINI, DEFAULT_APP_NAME } from "@/constants.js";
 import { get_current_version } from "@/utils/get_current_version.js";
 import { get_users_package_manager } from "@/utils/get_package_manager.js";
+import { logger } from "@/utils/logging.js";
 import { validate_app_name } from "@/utils/validate_app_name.js";
 
 import * as p from "@clack/prompts";
@@ -17,6 +18,8 @@ type Available_HTTP_Frameworks = (typeof HTTP_Frameworks)[number];
 
 interface Options {
   http_framework: Available_HTTP_Frameworks;
+  runtime: "node" | "deno" | "bun";
+  orm: "drizzle" | "prisma";
 }
 
 interface CLIResults {
@@ -34,6 +37,8 @@ const default_options: CLIResults = {
   },
   options: {
     http_framework: "express",
+    runtime: "node",
+    orm: "drizzle",
   },
 };
 
@@ -82,6 +87,37 @@ async function run_the_cli(): Promise<CLIResults> {
           ] as const,
           initialValue: "express",
         }),
+      runtime: ({ results: { http_framework } }) => {
+        switch (http_framework) {
+          case "express": {
+            return p.select({
+              message: "Which runtime would you like to use?",
+              options: [
+                { value: "node", label: "Node.js" } as const,
+                { value: "deno", label: "Deno" } as const,
+                { value: "bun", label: "Bun" } as const,
+              ] as const,
+            });
+          }
+          case "elysia": {
+            return new Promise((res) => res("bun"));
+          }
+          default: {
+            logger.error("Unknown http framework");
+            process.exit(1);
+          }
+        }
+      },
+      orm: () => {
+        return p.select({
+          message: "Which ORM would you like to use?",
+          options: [
+            { value: "drizzle", label: "Drizzle ORM" } as const,
+            { value: "prisma", label: "Prisma" } as const,
+          ] as const,
+          initialValue: "drizzle",
+        });
+      },
     },
     {
       onCancel() {
@@ -96,6 +132,8 @@ async function run_the_cli(): Promise<CLIResults> {
     flags: cli_results.flags,
     options: {
       http_framework: project.http_framework as Available_HTTP_Frameworks,
+      runtime: project.runtime as "node" | "deno" | "bun",
+      orm: project.orm as "drizzle" | "prisma",
     },
   };
 }

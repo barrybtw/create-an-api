@@ -12,7 +12,7 @@ async function main() {
 
   const {
     app_name,
-    options: { http_framework },
+    options: { http_framework, runtime, orm },
     flags: { import_alias, no_git, no_install },
   } = await run_the_cli();
 
@@ -23,10 +23,14 @@ async function main() {
   logger.info(`Git: ${no_git ? "No" : "Yes"}`);
   logger.info(`Install: ${no_install ? "No" : "Yes"}`);
   logger.info(`HTTP Framework: ${http_framework}`);
+  logger.info(`Runtime: ${runtime}`);
+  logger.info(`ORM: ${orm}`);
+  logger.info(`Scoped App Name: ${scopedAppName}`);
+  logger.info(`App Directory: ${appDir}`);
 
-  // Make a builder as we're going to add even more options than just the http framework, such as ORM, database, etc.
-
-  // Do some magic here with building the directory structure
+  if (http_framework === "express") {
+    logger.info("Using Express");
+  }
 
   process.exit(0);
 }
