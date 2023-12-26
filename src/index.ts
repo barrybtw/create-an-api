@@ -23,7 +23,7 @@ async function main() {
 
   const {
     app_name,
-    options: { http_framework, runtime, orm },
+    options: { http_framework, orm },
     flags: { import_alias, no_git, no_install },
   } = await run_the_cli();
 
@@ -34,27 +34,33 @@ async function main() {
   logger.info(`Git: ${no_git ? "No" : "Yes"}`);
   logger.info(`Install: ${no_install ? "No" : "Yes"}`);
   logger.info(`HTTP Framework: ${http_framework}`);
-  logger.info(`Runtime: ${runtime}`);
   logger.info(`ORM: ${orm}`);
   logger.info(`Scoped App Name: ${scopedAppName}`);
   logger.info(`App Directory: ${appDir}`);
 
   if (http_framework === "express") {
-    if (runtime == "node") {
-      // Make a folder called app_name
-      fs.mkdirsSync(appDir);
-      const dir = path.join(PKG_ROOT, "template", "express-node-base");
+    // Make a folder called app_name
+    fs.mkdirsSync(appDir);
+    const dir = path.join(PKG_ROOT, "template", "express-node-base");
 
-      // Copy express-node-base template into app_name
-      fs.copySync(dir, appDir);
-      fs.renameSync(
-        path.join(appDir, "_gitignore"),
-        path.join(appDir, ".gitignore")
-      );
-      // Replace all instances of express-node-base with app_name
-      // If no_git is false, then initialize git
-      // If no_install is false, then install dependencies
-    }
+    // Copy express-node-base template into app_name
+    fs.copySync(dir, appDir);
+    fs.renameSync(
+      path.join(appDir, "_gitignore"),
+      path.join(appDir, ".gitignore")
+    );
+    // Replace all instances of express-node-base with app_name
+    // If no_git is false, then initialize git
+    // If no_install is false, then install dependencies
+  } else if (http_framework === "elysia") {
+    fs.mkdirSync(appDir);
+    const dir = path.join(PKG_ROOT, "template", "elysia-bun-base");
+
+    fs.copySync(dir, appDir);
+    fs.renameSync(
+      path.join(appDir, "_gitignore"),
+      path.join(appDir, ".gitignore")
+    );
   }
 
   // Write name to package.json
@@ -71,6 +77,4 @@ async function main() {
   process.exit(0);
 }
 
-main().catch((process_error) => {
-  logger.error(process_error);
-});
+main().catch((process_error) => {});

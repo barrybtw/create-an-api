@@ -7,7 +7,11 @@ import { logger } from "./utils/logger.js";
 const app = express();
 app.use(express.json());
 
-app.use(ping_router);
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
+
+app.use("/ping", ping_router);
 
 app.listen(ENV.PORT, () => {
   logger.info(`Server started on port ${ENV.PORT}`);
