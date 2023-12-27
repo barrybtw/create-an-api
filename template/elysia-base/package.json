@@ -1,0 +1,16 @@
+{
+  "name": "elysia-bun-base",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "bun run --watch src/index.ts"
+  },
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "elysia": "latest",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "bun-types": "latest"
+  },
+  "module": "src/index.js"
+}
