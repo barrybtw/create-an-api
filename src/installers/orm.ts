@@ -33,7 +33,8 @@ const install_drizzle = async (props: Required) => {
   // add drizzle-orm to dependencies of package.json
   package_json.dependencies = {
     ...package_json.dependencies,
-    "drizzle-orm:": "^0.29.2",
+    "drizzle-orm": "^0.29.2",
+    "@planetscale/database": "^1.13.0",
   };
 
   // add drizzle-kit to dev dependencies of package.json
@@ -55,6 +56,14 @@ const install_drizzle = async (props: Required) => {
     "drizzle.schema.ts"
   );
 
+  const drizzle_migrator = path.join(orm_dir, "migrate.ts");
+  const drizzle_migrator_dest = path.join(
+    props.app_dir,
+    "src",
+    "db",
+    "drizzle.migrate.ts"
+  );
+
   const drizzle_instance = path.join(orm_dir, "instance.ts");
   const drizzle_instance_dest = path.join(
     props.app_dir,
@@ -63,12 +72,16 @@ const install_drizzle = async (props: Required) => {
     "drizzle.instance.ts"
   );
 
+  const drizzle_env = path.join(orm_dir, "env.ts");
+  const drizzle_env_dest = path.join(props.app_dir, "src", "utils", "env.ts");
+
   // add scripts to package.json
   package_json.scripts = {
     ...package_json.scripts,
     "db:push": "drizzle-kit push:mysql",
     "db:generate": "drizzle-kit generate:mysql",
     "db:studio": "drizzle-kit studio",
+    "db:migrate": "bun run src/db/drizzle.migrate.ts",
   };
 
   // Sort with sort-package-json
@@ -80,6 +93,15 @@ const install_drizzle = async (props: Required) => {
   // Copy over all the files
   fs.copySync(drizzle_config, drizle_config_dest);
   fs.copySync(drizzle_schema, drizzle_schema_dest);
+  fs.copySync(drizzle_migrator, drizzle_migrator_dest);
   fs.copySync(drizzle_instance, drizzle_instance_dest);
+  fs.copySync(drizzle_env, drizzle_env_dest);
+
+  // Move the _env file into the project as .env
+  const env_file = path.join(orm_dir, "_env");
+  const env_file_dest = path.join(props.app_dir, ".env");
+  fs.copySync(env_file, env_file_dest);
+
+  return;
 };
 const install_prisma = async (props: Required) => {};
