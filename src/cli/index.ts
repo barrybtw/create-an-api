@@ -1,14 +1,13 @@
 import { CREATE_MALDINI, DEFAULT_APP_NAME } from "@/constants.js";
 import { get_current_version } from "@/utils/get_current_version.js";
 import { get_users_package_manager } from "@/utils/get_package_manager.js";
-import { logger } from "@/utils/logging.js";
 import { validate_app_name } from "@/utils/validate_app_name.js";
+import { validate_import_alias } from "@/utils/validate_import_alias.js";
 
 import * as p from "@clack/prompts";
 import { Command } from "commander";
 
 interface CLIFLags {
-  no_git: boolean;
   no_install: boolean;
   import_alias: string;
 }
@@ -30,7 +29,6 @@ interface CLIResults {
 const default_options: CLIResults = {
   app_name: DEFAULT_APP_NAME,
   flags: {
-    no_git: false,
     no_install: false,
     import_alias: "@/",
   },
@@ -46,7 +44,6 @@ async function run_the_cli(): Promise<CLIResults> {
     .name(CREATE_MALDINI)
     .description("Create a new Maldini project")
     .argument("[dir]", "Directory to create the project in")
-    .option("--noGit", "Don't initialize a git repository", false)
     .option("--noInstall", "Don't install dependencies", false)
     .option("-i, --import_alias", "Import alias for your project", "@/")
     .version(
@@ -95,6 +92,22 @@ async function run_the_cli(): Promise<CLIResults> {
           initialValue: "drizzle",
         });
       },
+      ...(!cli_results.flags.no_install && {
+        install: () => {
+          return p.confirm({
+            message: `Install dependencies with ${package_manager}?`,
+            initialValue: true,
+          });
+        },
+      }),
+      import_alias: () =>
+        p.text({
+          message: "What alias would you prefer to use for imports?",
+          defaultValue: cli_results.flags.import_alias,
+          placeholder: cli_results.flags.import_alias,
+
+          validate: validate_import_alias,
+        }),
     },
     {
       onCancel() {
@@ -106,7 +119,11 @@ async function run_the_cli(): Promise<CLIResults> {
   //
   return {
     app_name: project.name ?? cli_results.app_name,
-    flags: cli_results.flags,
+    flags: {
+      ...cli_results.flags,
+      no_install: !project.install || cli_results.flags.no_install,
+      import_alias: project.import_alias || cli_results.flags.import_alias,
+    },
     options: {
       http_framework: project.http_framework as Available_HTTP_Frameworks,
       orm: project.orm as "drizzle" | "prisma",
