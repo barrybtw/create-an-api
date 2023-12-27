@@ -42,14 +42,11 @@ async function main() {
 
   // If import_alias is different from the default, then rewrite the tsconfig.json file
   if (import_alias !== "@/") {
-    logger.info("Rewriting tsconfig.json");
+    // TODO: Rewrite tsconfig.json
   }
 
-  // If !no_install, run the package manager install command
   if (!no_install) {
-    logger.info("Installing dependencies");
-    installDependencies({ projectDir: app_dir });
-    // do stuff
+    await installDependencies({ projectDir: app_dir });
   }
 
   process.exit(0);
