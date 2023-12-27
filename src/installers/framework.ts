@@ -48,6 +48,9 @@ export const install_http_framework: FrameworkInstaller = async (props) => {
     }
   }
 
+  // Make the folder
+  fs.mkdirSync(props.app_dir);
+
   // Copy the template into folder
   fs.copySync(framework_dir, props.app_dir);
 
