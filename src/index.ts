@@ -34,10 +34,14 @@ async function main() {
     http_framework: http_framework,
   });
 
+  const is_bun = http_framework === "elysia";
+
   await install_orm({
     app_dir: app_dir,
     scoped_app_name: scoped_app_name,
     orm: orm,
+    dotenv: !is_bun,
+    bun: is_bun,
   });
 
   // If import_alias is different from the default, then rewrite the tsconfig.json file

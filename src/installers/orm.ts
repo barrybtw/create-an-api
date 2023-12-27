@@ -7,6 +7,8 @@ import { PKG_ROOT } from "@/constants.js";
 type Required = {
   app_dir: string;
   scoped_app_name: string;
+  dotenv: boolean;
+  bun: boolean;
 };
 
 type ORM = Pick<Options, "orm"> & Required;
@@ -17,9 +19,9 @@ export const install_orm: ORMInstaller = async (props) => {
     case "drizzle":
       await install_drizzle(props);
       break;
-    case "prisma":
-      await install_prisma(props);
-      break;
+    // case "prisma":
+    //   await install_prisma(props);
+    //   break;
     default:
       break;
   }
@@ -78,10 +80,14 @@ const install_drizzle = async (props: Required) => {
   // add scripts to package.json
   package_json.scripts = {
     ...package_json.scripts,
-    "db:push": "drizzle-kit push:mysql",
-    "db:generate": "drizzle-kit generate:mysql",
-    "db:studio": "drizzle-kit studio",
-    "db:migrate": "bun run src/db/drizzle.migrate.ts",
+    "db:push": `${props.dotenv && "dotenv "}drizzle-kit push:mysql`,
+    "db:generate": `${props.dotenv && "dotenv "}drizzle-kit generate:mysql`,
+    "db:studio": `${props.dotenv && "dotenv "}drizzle-kit studio`,
+    "db:migrate": `${props.dotenv && "dotenv "}${
+      props.bun
+        ? "bun run src/db/drizzle.migrate.ts"
+        : "tsx src/db/drizzle.migrate.ts"
+    }`,
   };
 
   // Sort with sort-package-json
@@ -104,4 +110,16 @@ const install_drizzle = async (props: Required) => {
 
   return;
 };
-const install_prisma = async (props: Required) => {};
+const install_prisma = async (props: Required) => {
+  // Retrieve the package.json
+  const package_json_path = path.join(props.app_dir, "package.json");
+  const package_json = fs.readJsonSync(package_json_path) as MaldiniJson;
+
+  // add prisma to dependencies of package.json
+  package_json.dependencies = {
+    ...package_json.dependencies,
+    prisma: "^5.7.1",
+  };
+
+  // TODO
+};

@@ -4,7 +4,7 @@
   "description": "",
   "type": "module",
   "scripts": {
-    "dev": "nodemon",
+    "dev": "dotenv nodemon",
     "build": "tsc",
     "start": "node dist/index.js",
     "clean": "rm -rf dist"
@@ -18,5 +18,8 @@
     "tsx": "^4.7.0",
     "typescript": "^5.3.3",
     "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "dotenv-cli": "^7.3.0"
   }
 }

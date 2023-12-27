@@ -17,7 +17,7 @@ type Available_HTTP_Frameworks = (typeof HTTP_Frameworks)[number];
 
 interface Options {
   http_framework: Available_HTTP_Frameworks;
-  orm: "drizzle" | "prisma";
+  orm: "drizzle" | "none";
 }
 
 interface CLIResults {
@@ -87,7 +87,7 @@ async function run_the_cli(): Promise<CLIResults> {
           message: "Which ORM would you like to use?",
           options: [
             { value: "drizzle", label: "Drizzle ORM" } as const,
-            { value: "prisma", label: "Prisma" } as const,
+            { value: "none", label: "None" } as const,
           ] as const,
           initialValue: "drizzle",
         });
@@ -126,7 +126,7 @@ async function run_the_cli(): Promise<CLIResults> {
     },
     options: {
       http_framework: project.http_framework as Available_HTTP_Frameworks,
-      orm: project.orm as "drizzle" | "prisma",
+      orm: project.orm as "drizzle" | "none",
     },
   };
 }
