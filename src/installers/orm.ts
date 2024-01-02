@@ -28,18 +28,15 @@ export const install_orm: ORMInstaller = async (props) => {
 };
 
 const install_drizzle = async (props: Required) => {
-  // Retrieve the package.json
   const package_json_path = path.join(props.app_dir, "package.json");
   const package_json = fs.readJsonSync(package_json_path) as MaldiniJson;
 
-  // add drizzle-orm to dependencies of package.json
   package_json.dependencies = {
     ...package_json.dependencies,
     "drizzle-orm": "^0.29.2",
     "@planetscale/database": "^1.13.0",
   };
 
-  // add drizzle-kit to dev dependencies of package.json
   package_json.devDependencies = {
     ...package_json.devDependencies,
     "drizzle-kit": "^0.20.8",
@@ -77,7 +74,6 @@ const install_drizzle = async (props: Required) => {
   const drizzle_env = path.join(orm_dir, "env.ts");
   const drizzle_env_dest = path.join(props.app_dir, "src", "utils", "env.ts");
 
-  // add scripts to package.json
   package_json.scripts = {
     ...package_json.scripts,
     "db:push": `${props.dotenv && "dotenv "}drizzle-kit push:mysql`,
@@ -90,32 +86,27 @@ const install_drizzle = async (props: Required) => {
     }`,
   };
 
-  // Sort with sort-package-json
   const sorted_package_json = sortPackageJson(package_json);
 
-  // Write the new package.json
   fs.writeJsonSync(package_json_path, sorted_package_json, { spaces: 2 });
 
-  // Copy over all the files
   fs.copySync(drizzle_config, drizle_config_dest);
   fs.copySync(drizzle_schema, drizzle_schema_dest);
   fs.copySync(drizzle_migrator, drizzle_migrator_dest);
   fs.copySync(drizzle_instance, drizzle_instance_dest);
   fs.copySync(drizzle_env, drizzle_env_dest);
 
-  // Move the _env file into the project as .env
   const env_file = path.join(orm_dir, "_env");
   const env_file_dest = path.join(props.app_dir, ".env");
   fs.copySync(env_file, env_file_dest);
 
   return;
 };
-const install_prisma = async (props: Required) => {
-  // Retrieve the package.json
+export const install_prisma = async (props: Required) => {
+  // Abandoned for now
   const package_json_path = path.join(props.app_dir, "package.json");
   const package_json = fs.readJsonSync(package_json_path) as MaldiniJson;
 
-  // add prisma to dependencies of package.json
   package_json.dependencies = {
     ...package_json.dependencies,
     prisma: "^5.7.1",
