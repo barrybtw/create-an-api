@@ -43,8 +43,8 @@ export const install_http_framework: FrameworkInstaller = async (props) => {
         process.exit(0);
       }
 
-      // If the user wants to continue, empty the folder
-      fs.emptyDirSync(props.app_dir);
+      // If the user wants to continue, get rid of the folder
+      fs.removeSync(props.app_dir);
     }
   }
 
