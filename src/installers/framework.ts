@@ -43,16 +43,15 @@ export const install_http_framework: FrameworkInstaller = async (props) => {
         process.exit(0);
       }
 
-      // If the user wants to continue, get rid of the folder
-      fs.removeSync(props.app_dir);
+      // If the user wants to continue, get rid of the folder contents
+      fs.emptyDirSync(props.app_dir);
+
+      fs.copySync(framework_dir, props.app_dir);
     }
+  } else {
+    fs.mkdirSync(props.app_dir);
+    fs.copySync(framework_dir, props.app_dir);
   }
-
-  // Make the folder
-  fs.mkdirSync(props.app_dir);
-
-  // Copy the template into folder
-  fs.copySync(framework_dir, props.app_dir);
 
   // Rename the gitignore file
   fs.renameSync(
